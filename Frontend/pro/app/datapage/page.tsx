@@ -24,8 +24,42 @@ export default function(){
     const [userData,setUserData] = useState("")
     const [ccData,setCCdata] = useState<Contest[]>([])
     const [ccDataSec,setCCdataSec] = useState<Contest[]>([])
-    const [cfData,setCFdata] = useState<ContestCodeforces[]>([])
+    const [cfDataFirst,setCFdataFirst] = useState<ContestCodeforces[]>([])
+    const [cfDataSecond,setCFdataSecond] = useState<ContestCodeforces[]>([])
     const [numvalue,setValue] = useState(0);
+
+    const [playlistData,setPlaylistData] = useState([])
+    const [ccplaylistData,setCCplaylistData] = useState([])
+
+    useEffect(()=>{
+      const findData = async()=>{
+          try{
+              let ytdata = await axios.get(`https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=PLcXpkI9A-RZLUfBSNp-YQBCOezZKbDSgB&key=AIzaSyDM-ijJJgH9nirFb2hNGUYOpUm5XCgS4oo`)
+              setPlaylistData(ytdata.data.items)
+              console.log("yoyo" , playlistData)
+          }
+          catch(error){
+              console.log("Something went wrong while fetching data " + error)
+          }
+      }
+      findData()
+      
+  },[])
+
+  useEffect(()=>{
+    const findData = async()=>{
+        try{
+            let ytdata = await axios.get(`https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=PLcXpkI9A-RZIZ6lsE0KCcLWeKNoG45fYr&key=AIzaSyDM-ijJJgH9nirFb2hNGUYOpUm5XCgS4oo`)
+            setCCplaylistData(ytdata.data.items)
+            console.log("yoyo" , playlistData)
+        }
+        catch(error){
+            console.log("Something went wrong while fetching data " + error)
+        }
+    }
+    findData()
+    
+},[])
 
 
     const getTimeLeft = (value:string)=>{
@@ -84,7 +118,8 @@ export default function(){
           const CodeForcesData = async()=>{
           try{
             let response  = await axios.get("http://localhost:5000/api/codeforces")
-            setCFdata(response.data.result|| [])
+            setCFdataFirst(response.data.DoneContest)
+            setCFdataSecond(response.data.ComingContest)
             setValue(4)
             console.log("Mil gya data")
           }
@@ -139,16 +174,22 @@ export default function(){
               
               ))}
 
-            {ccDataSec.map((cont,index)=>(
+            {ccDataSec.map((cont,index)=>{
+              let video = ccplaylistData[index]?.snippet?.resourceId?.videoId;
+               return( 
               <div key={index} className="bg-slate-800 hover:shadow-lg hover:shadow-blue-500/50 transition-all duration-300 w-[30%] m-3 rounded-xl  hover:cursor-pointer p-2 flex flex-col justify-center items-center space-y-4">
                     <p className="text-[20px] text-white font-bold">TimeLine <span className="text-red-500">Past-Contest</span></p>
                     <p className="text-[20px] text-white font-bold">Contest Name : <span className="text-red-500">{cont.contest_code}</span></p>
                     <p className="text-[20px] text-white font-bold">Starts At : <span className="text-red-500">{new Date(cont.contest_start_date).toLocaleString()}</span></p>
                     <p className="text-[20px] text-white font-bold">End At : <span className="text-red-500">{new Date(cont.contest_end_date).toLocaleString()}</span></p>
                     <p className="text-[20px] text-white font-bold">Time Left : <span className="text-red-500">{findCCDate(cont.contest_start_date)}</span></p>
-                    <Link href={`https://www.codechef.com/${cont.contest_code}`}><button className="bg-green-600 hover:bg-red-600 p-3 text-white font-bold rounded-xl">Go to Contest</button></Link>
-                </div>
-            ))} 
+                    <div className="flex justify-center items-center space-x-6 w-full">
+                    <Link href={`https://codeforces.com/contest/${cont.id}`}><button className="bg-green-600 hover:cursor-pointer hover:bg-red-600 p-3 text-white font-bold rounded-xl">Go to Contest</button></Link>
+                    <Link href={`https://www.youtube.com/watch?v=${video}`}><button className="bg-green-600 hover:cursor-pointer hover:bg-red-600 p-3 text-white font-bold rounded-xl">Check out Video</button></Link>
+                    </div>               
+                     </div>
+               )
+          })} 
              </>
             ):(
               <div>
@@ -160,18 +201,43 @@ export default function(){
 
            {/* CodeForces Data  */}
 
-           {numvalue == 4 && cfData.length>0?(
-              cfData.map((cont,index)=>(
-                <div key={index} className="bg-slate-800 hover:shadow-lg hover:shadow-blue-500/50 transition-all duration-300 w-[30%] m-3 rounded-xl  hover:cursor-pointer p-2 flex flex-col justify-center items-center space-y-6">
-                    <p className="text-center text-[20px] text-white font-bold">{cont.name}</p>
+           {numvalue == 4 && (cfDataFirst.length>0 || cfDataSecond.length>0)?(
+              <>
+
+            {cfDataSecond.map((cont,index)=>(
+              <div key={index} className="bg-slate-800 hover:shadow-lg hover:shadow-blue-500/50 transition-all duration-300 w-[30%] m-3 rounded-xl  hover:cursor-pointer p-2 flex flex-col justify-center items-center space-y-4">
+                   <p className="text-center text-[20px] text-white font-bold">{cont.name}</p>
                     <p className="text-center text-[20px] text-white font-bold">Contest Duration : <span className="text-red-500">{cont.phase === "BEFORE"?"Upcoming":"Past Contest"}</span></p>
                     <p className="text-center text-[20px] text-white font-bold">StartTime: <span className="text-red-500">{new Date(1000*cont.startTimeSeconds).toLocaleString()}</span></p>
                     <p className="text-center text-white font-bold">Time Left - <span className="text-red-500">{getTimeLeft(cont.startTimeSeconds.toString())}</span></p>
+                    <div className="flex justify-center items-center space-x-6 w-full">
                     <Link href={`https://codeforces.com/contest/${cont.id}`}><button className="bg-green-600 hover:cursor-pointer hover:bg-red-600 p-3 text-white font-bold rounded-xl">Go to Contest</button></Link>
+                    </div>
                 </div>
-              ))
-            ):(
+            ))} 
+
+              {cfDataFirst.map((cont,index)=>{
+                let video = playlistData[index]?.snippet?.resourceId?.videoId; 
+                return(
+                  <>
+                  <div  className="bg-slate-800 hover:shadow-lg hover:shadow-blue-500/50 transition-all duration-300 w-[30%] m-3 rounded-xl  hover:cursor-pointer p-2 flex flex-col justify-center items-center space-y-4">
+                   <p className="text-center text-[20px] text-white font-bold">{cont.name}</p>
+                    <p className="text-center text-[20px] text-white font-bold">Contest Duration : <span className="text-red-500">{cont.phase === "BEFORE"?"Upcoming":"Past Contest"}</span></p>
+                    <p className="text-center text-[20px] text-white font-bold">StartTime: <span className="text-red-500">{new Date(1000*cont.startTimeSeconds).toLocaleString()}</span></p>
+                    <p className="text-center text-white font-bold">Time Left - <span className="text-red-500">{getTimeLeft(cont.startTimeSeconds.toString())}</span></p>
+                    <div className="flex justify-center items-center space-x-6 w-full">
+                    <Link href={`https://codeforces.com/contest/${cont.id}`}><button className="bg-green-600 hover:cursor-pointer hover:bg-red-600 p-3 text-white font-bold rounded-xl">Go to Contest</button></Link>
+                    <Link href={`https://www.youtube.com/watch?v=${video}`}><button className="bg-green-600 hover:cursor-pointer hover:bg-red-600 p-3 text-white font-bold rounded-xl">Check out Video</button></Link>
+                    </div>
+                </div>
               
+                  </>
+                )
+                
+               })}
+
+             </>
+            ):(
               <div>
               {/* <p>No data found</p> */}
               </div>

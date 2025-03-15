@@ -23,9 +23,21 @@ app.get("/api/codechef", async (req, res) => {
 
 
 app.get("/api/codeforces",async(req,res)=>{
+  const Coming = []
+  const Done = []
   try{
     const response = await axios.get("https://codeforces.com/api/contest.list")
-    return res.json(response.data)
+    response.data.result.map((value)=>{
+      
+      if(value.phase == "FINISHED"){
+        Done.push(value)
+      }
+      else{
+        Coming.push(value)
+      }
+    })
+    console.log({msg:Done})
+    return res.json({DoneContest : Done , ComingContest:Coming})
   }
   catch(error){
     res.json({msg:"Something went wrong while fetching the CodeForces data " + error})

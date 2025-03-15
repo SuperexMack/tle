@@ -27,6 +27,7 @@ export default function(){
         const findData = async()=>{
             try{
                 let ytdata = await axios.get(`https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=${fa}&key=AIzaSyDM-ijJJgH9nirFb2hNGUYOpUm5XCgS4oo`)
+                console.log(ytdata)
                 setPlaylistData(ytdata.data.items)
                 console.log("yoyo" , playlistData)
             }
