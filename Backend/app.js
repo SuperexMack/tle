@@ -27,15 +27,19 @@ app.get("/api/codeforces",async(req,res)=>{
   const Done = []
   try{
     const response = await axios.get("https://codeforces.com/api/contest.list")
-    response.data.result.map((value)=>{
+    let counter = 0;
+
+    for (const value of response.data.result) {
+      if (counter >= 50) break;
+
+      if (value.phase === "FINISHED") {
+        Done.push(value);
+      } else {
+        Coming.push(value);
+      }
       
-      if(value.phase == "FINISHED"){
-        Done.push(value)
-      }
-      else{
-        Coming.push(value)
-      }
-    })
+      counter++;
+    }
     console.log({msg:Done})
     return res.json({DoneContest : Done , ComingContest:Coming})
   }
