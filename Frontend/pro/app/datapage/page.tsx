@@ -18,7 +18,8 @@ export default function(){
     id:Number
     name:string;
     phase:string;
-    startTimeSeconds:string;
+    startTimeSeconds:number;
+    
   }
     const [userData,setUserData] = useState("")
     const [ccData,setCCdata] = useState<Contest[]>([])
@@ -26,7 +27,34 @@ export default function(){
     const [cfData,setCFdata] = useState<ContestCodeforces[]>([])
     const [numvalue,setValue] = useState(0);
 
-   
+
+    const getTimeLeft = (value:string)=>{
+      let valConvertion = parseInt(value)
+      let currentTime = Date.now()
+      valConvertion = valConvertion*1000;
+      let diff = valConvertion - currentTime
+      let Days = Math.floor(diff/(1000*24*60*60));
+      if(Days<0) return 'Contest Completed'
+      let Hours = Math.floor((diff/(1000*60*60))%24);
+      let minutes = Math.floor((diff/(1000*60))%60)
+
+      return `${Days} Days , ${Hours} Hours , ${minutes} minutes`
+    }
+
+    const findCCDate = (value:string)=>{
+      let getValue = new Date(value).getTime()
+      console.log("value of getVal " + getValue)
+      let currentTime = Date.now()
+      let diff = getValue - currentTime
+      let Days = Math.floor(diff/(1000*24*60*60));
+      if(Days<0) return 'Contest Completed'
+      let Hours = Math.floor((diff/(1000*60*60))%24);
+      let minutes = Math.floor((diff/(1000*60))%60)
+
+      return `${Days} Days , ${Hours} Hours , ${minutes} minutes`
+    }
+
+    
     
     useEffect(() => {
 
@@ -89,7 +117,7 @@ export default function(){
            
             
             
-           <div className="w-full min-h-screen flex items-center flex-col space-y-4">
+           <div className="w-full min-h-screen flex  flex-wrap justify-center space-x-3 space-y-3">
             
             {numvalue == 0&&(
               <div className="flex justify-center items-center min-h-screen w-full">
@@ -100,23 +128,25 @@ export default function(){
             {numvalue == 2 && (ccData.length>0 || ccDataSec.length>0)?(
               <>
               {ccData.map((cont,index)=>(
-                <div key={index} className="bg-slate-800 w-[60%] rounded-xl hover:bg-blue-700 hover:cursor-pointer p-2 flex flex-col justify-center items-center space-y-4">
-                    <p className="text-[20px] text-white font-bold">Duration <span className="text-red-500">Upcoming</span></p>
+                <div key={index} className="bg-slate-800 hover:shadow-lg hover:shadow-blue-500/50 transition-all duration-300 w-[30%] m-3 rounded-xl  hover:cursor-pointer p-2 flex flex-col justify-center items-center space-y-4">
+                    <p className="text-[20px] text-white font-bold">TimeLine <span className="text-red-500">Upcoming</span></p>
                     <p className="text-[20px] text-white font-bold">Contest Name : <span className="text-red-500">{cont.contest_code}</span></p>
                     <p className="text-[20px] text-white font-bold">Starts At : <span className="text-red-500">{new Date(cont.contest_start_date).toLocaleString()}</span></p>
                     <p className="text-[20px] text-white font-bold">End At : <span className="text-red-500">{new Date(cont.contest_end_date).toLocaleString()}</span></p>
-                    <Link href={`https://www.codechef.com/${cont.contest_code}`}><button className="bg-green-600 p-3 text-white font-bold rounded-xl">Go to Contest</button></Link>
+                    <p className="text-[20px] text-white font-bold">Time Left : <span className="text-red-500">{findCCDate(cont.contest_start_date)}</span></p>
+                    <Link href={`https://www.codechef.com/${cont.contest_code}`}><button className="bg-green-600 hover:bg-red-600 p-3 text-white font-bold rounded-xl">Go to Contest</button></Link>
                 </div>
               
               ))}
 
             {ccDataSec.map((cont,index)=>(
-              <div key={index} className="bg-slate-800 w-[60%] rounded-xl hover:bg-blue-700 hover:cursor-pointer p-2 flex flex-col justify-center items-center space-y-4">
-                    <p className="text-[20px] text-white font-bold">Duration <span className="text-red-500">Past-Contest</span></p>
+              <div key={index} className="bg-slate-800 hover:shadow-lg hover:shadow-blue-500/50 transition-all duration-300 w-[30%] m-3 rounded-xl  hover:cursor-pointer p-2 flex flex-col justify-center items-center space-y-4">
+                    <p className="text-[20px] text-white font-bold">TimeLine <span className="text-red-500">Past-Contest</span></p>
                     <p className="text-[20px] text-white font-bold">Contest Name : <span className="text-red-500">{cont.contest_code}</span></p>
                     <p className="text-[20px] text-white font-bold">Starts At : <span className="text-red-500">{new Date(cont.contest_start_date).toLocaleString()}</span></p>
                     <p className="text-[20px] text-white font-bold">End At : <span className="text-red-500">{new Date(cont.contest_end_date).toLocaleString()}</span></p>
-                    <Link href={`https://www.codechef.com/${cont.contest_code}`}><button className="bg-green-600 p-3 text-white font-bold rounded-xl">Go to Contest</button></Link>
+                    <p className="text-[20px] text-white font-bold">Time Left : <span className="text-red-500">{findCCDate(cont.contest_start_date)}</span></p>
+                    <Link href={`https://www.codechef.com/${cont.contest_code}`}><button className="bg-green-600 hover:bg-red-600 p-3 text-white font-bold rounded-xl">Go to Contest</button></Link>
                 </div>
             ))} 
              </>
@@ -127,30 +157,16 @@ export default function(){
             )}
 
 
-             {numvalue == 2 && ccDataSec.length>0?(
-              ccDataSec.map((cont,index)=>(
-                <div key={index} className="bg-slate-800 w-[60%] rounded-xl hover:bg-blue-700 hover:cursor-pointer p-2 flex flex-col justify-center items-center space-y-4">
-                    <p className="text-[20px] text-white font-bold">Contest Name : <span className="text-red-500">{cont.contest_code}</span></p>
-                    <p className="text-[20px] text-white font-bold">Starts At : <span className="text-red-500">{new Date(cont.contest_start_date).toLocaleString()}</span></p>
-                    <p className="text-[20px] text-white font-bold">End At : <span className="text-red-500">{new Date(cont.contest_end_date).toLocaleString()}</span></p>
-                    <Link href={`https://www.codechef.com/${cont.contest_code}`}><button className="bg-green-600 p-3 text-white font-bold rounded-xl">Go to Contest</button></Link>
-                </div>
-              ))
-            ):(
-              <div>
-              {/* <p>No data found</p> */}
-              </div>
-            )}
-          
 
            {/* CodeForces Data  */}
 
            {numvalue == 4 && cfData.length>0?(
               cfData.map((cont,index)=>(
-                <div key={index} className="bg-slate-800 w-[60%] rounded-xl hover:bg-blue-700 hover:cursor-pointer p-2 flex flex-col justify-center items-center space-y-4">
-                    <p className="text-[20px] text-white font-bold">{cont.name}</p>
-                    <p className="text-[20px] text-white font-bold">Contest Duration : <span className="text-red-500">{cont.phase === "BEFORE"?"Upcoming":"Past Contest"}</span></p>
-                    <p className="text-[20px] text-white font-bold">StartTime: <span className="text-red-500">{new Date(1000*cont.startTimeSeconds).toLocaleString()}</span></p>
+                <div key={index} className="bg-slate-800 hover:shadow-lg hover:shadow-blue-500/50 transition-all duration-300 w-[30%] m-3 rounded-xl  hover:cursor-pointer p-2 flex flex-col justify-center items-center space-y-6">
+                    <p className="text-center text-[20px] text-white font-bold">{cont.name}</p>
+                    <p className="text-center text-[20px] text-white font-bold">Contest Duration : <span className="text-red-500">{cont.phase === "BEFORE"?"Upcoming":"Past Contest"}</span></p>
+                    <p className="text-center text-[20px] text-white font-bold">StartTime: <span className="text-red-500">{new Date(1000*cont.startTimeSeconds).toLocaleString()}</span></p>
+                    <p className="text-center text-white font-bold">Time Left - <span className="text-red-500">{getTimeLeft(cont.startTimeSeconds.toString())}</span></p>
                     <Link href={`https://codeforces.com/contest/${cont.id}`}><button className="bg-green-600 hover:cursor-pointer hover:bg-red-600 p-3 text-white font-bold rounded-xl">Go to Contest</button></Link>
                 </div>
               ))
