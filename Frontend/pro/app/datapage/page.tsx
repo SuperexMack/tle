@@ -87,6 +87,37 @@ useEffect(()=>{
 },[])
 
 
+interface lcdatatype{
+  title:string;
+  videoId:string;
+}
+
+const [newlcplaylistData,setnewlcplaylistdata] = useState<lcdatatype[]>([])
+useEffect(() => {
+  setnewlcplaylistdata(prevState => [
+    ...prevState,  // Purana data retain karo
+    ...LcplaylistData.map(value=>({
+      title: value.snippet.title,
+      videoId: value.snippet.resourceId.videoId
+    }))
+  ]);
+}, [LcplaylistData]);
+
+
+// Magic with CF 
+
+const [newCFplaylistData,setnewCFplaylistData] = useState<lcdatatype[]>([])
+
+useEffect(()=>{
+  setnewCFplaylistData(prev=>[
+    ...prev,
+    ...playlistData.map(value=>({
+      title: value.snippet.title,
+      videoId: value.snippet.resourceId.videoId
+    }))
+  ])
+},[playlistData])
+
     const getTimeLeft = (value:string)=>{
       let valConvertion = parseInt(value)
       let currentTime = Date.now()
@@ -194,6 +225,9 @@ useEffect(()=>{
     }, [userData]); 
 
 
+    // now i am gonna play with the lklklkjjj
+
+
     return(
         <>
 
@@ -201,6 +235,7 @@ useEffect(()=>{
         <div className={`${bgvalue%2==0 ? "bg-[#0f0e1a]" : "bg-white"} w-full min-h-screen flex flex-col`}>
            <div className="w-full h-[100px] mt-[100px] flex space-x-6 items-center justify-center">
            <HyperTextDemo></HyperTextDemo>
+           {/* <h1 className="text-[30px] text-purple-500">Select a platform</h1> */}
               <select onChange={(e)=>setUserData(e.target.value)} className={`${bgvalue%2==0 ? "bg-[white]" : "bg-slate-200 border-2 border-black"} border-lg rounded-lg p-1`}>
                 <option value="selected">Select option</option>
                 <option value="leetcode">LeetCode</option>
@@ -277,17 +312,30 @@ useEffect(()=>{
             ))} 
 
               {cfDataFirst.map((cont,index)=>{
-                let video = playlistData[index]?.snippet?.resourceId?.videoId; 
+                let checkContestName = cont.name.match(/\d+/)?.[0];
+                let setnewVideo = "";
+
+              for(let check of newCFplaylistData){
+                if(checkContestName && check.title.includes(checkContestName)){
+                  setnewVideo = check.videoId
+                }
+              }
+
                 return(
                   <>
-                  <div  className="bg-slate-800 hover:shadow-lg hover:shadow-blue-500/50 transition-all duration-300 w-[30%] m-3 rounded-xl  hover:cursor-pointer p-2 flex flex-col justify-center items-center space-y-4">
+                  <div key={index} className="bg-slate-800 hover:shadow-lg hover:shadow-blue-500/50 transition-all duration-300 w-[30%] m-3 rounded-xl  hover:cursor-pointer p-2 flex flex-col justify-center items-center space-y-4">
                    <p className="text-center text-[20px] text-white font-bold">{cont.name}</p>
                     <p className="text-center text-[20px] text-white font-bold">Contest Duration : <span className="text-red-500">{cont.phase === "BEFORE"?"Upcoming":"Past Contest"}</span></p>
                     <p className="text-center text-[20px] text-white font-bold">StartTime: <span className="text-red-500">{new Date(1000*cont.startTimeSeconds).toLocaleString()}</span></p>
                     <p className="text-center text-white font-bold">Time Left - <span className="text-red-500">{getTimeLeft(cont.startTimeSeconds.toString())}</span></p>
                     <div className="flex justify-center items-center space-x-6 w-full">
                     <Link href={`https://codeforces.com/contest/${cont.id}`}><button className="bg-green-600 hover:cursor-pointer hover:bg-red-600 p-3 text-white font-bold rounded-xl">Go to Contest</button></Link>
-                    <Link href={`https://www.youtube.com/watch?v=${video}`}><button className="bg-green-600 hover:cursor-pointer hover:bg-red-600 p-3 text-white font-bold rounded-xl">Check out Video</button></Link>
+                    {setnewVideo.length>1?(
+                    <Link href={`https://www.youtube.com/watch?v=${setnewVideo}`}><button className="bg-green-600 hover:cursor-pointer hover:bg-red-600 p-3 text-white font-bold rounded-xl">Check out Video</button></Link>
+                    ):(
+                      <>
+                      </>
+                    )}
                     </div>
                 </div>
               
@@ -308,7 +356,16 @@ useEffect(()=>{
               <>
 
             {lcContest.map((cont,index)=>{
-              let video = LcplaylistData[index]?.snippet?.resourceId?.videoId; 
+              let checkContestName = cont.title.match(/\d+/)?.[0];
+
+              let setnewVideo = "";
+
+              for(let check of newlcplaylistData){
+                if(checkContestName && check.title.includes(checkContestName)){
+                  setnewVideo = check.videoId
+                }
+              }
+              
               return(
               <div key={index} className="bg-slate-800 hover:shadow-lg hover:shadow-blue-500/50 transition-all duration-300 w-[30%] m-3 rounded-xl  hover:cursor-pointer p-2 flex flex-col justify-center items-center space-y-4">
                    <p className="text-center text-[20px] text-white font-bold">{cont.title}</p>
@@ -317,8 +374,14 @@ useEffect(()=>{
                     <div className="flex justify-center items-center space-x-6 w-full">
                     <div className="flex justify-center items-center space-x-6 w-full">
                     <Link href={`https://codeforces.com/contest/${cont.id}`}><button className="bg-green-600 hover:cursor-pointer hover:bg-red-600 p-3 text-white font-bold rounded-xl">Go to Contest</button></Link>
-                    <Link href={`https://www.youtube.com/watch?v=${video}`}><button className="bg-green-600 hover:cursor-pointer hover:bg-red-600 p-3 text-white font-bold rounded-xl">Check out Video</button></Link>
-                    </div>                    </div>
+                    {setnewVideo.length>1?(
+                    <Link href={`https://www.youtube.com/watch?v=${setnewVideo}`}><button className="bg-green-600 hover:cursor-pointer hover:bg-red-600 p-3 text-white font-bold rounded-xl">Check out Video</button></Link>
+                    ):(
+<>
+</>
+                    )}
+                    </div>                    
+                    </div>
                 </div>
               )
             })} 

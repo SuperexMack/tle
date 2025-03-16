@@ -5,7 +5,7 @@ import { useState } from 'react';
 
 export function Navbar({bgvalue,setvalue}){
     const click = ()=>{
-       setvalue((prev:number)=>prev+1)
+       setvalue(()=>bgvalue+1)
     }
     return(
         <>
