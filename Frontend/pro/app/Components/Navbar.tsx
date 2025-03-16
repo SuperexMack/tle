@@ -1,14 +1,19 @@
+"use client"
 import { SunMoon } from 'lucide-react';
+import { useState } from 'react';
 
 
-export function Navbar(){
+export function Navbar({bgvalue,setvalue}){
+    const click = ()=>{
+       setvalue((prev:number)=>prev+1)
+    }
     return(
         <>
         <div className="bg-white/10 backdrop-blur-lg z-50  w-full h-[70px] flex items-center border-b-slate-300 fixed top-0">
 
             {/* Name tag */}
            <div className="absolute left-[20%]">
-            <h1 className="font-bold text-[30px] text-white">TLE-Ele-App</h1>
+            <h1 className={`${bgvalue%2==0 ? "text-white" : "text-black"} font-bold text-[30px] `}>TLE-Ele-App</h1>
            </div>
 
            {/* Go Tag */}
@@ -19,7 +24,7 @@ export function Navbar(){
               </div>
 
               <div className="flex items-center justify-center ">
-              <SunMoon className='w-[50px] h-[50px] text-white'></SunMoon>
+              <SunMoon onClick={click} className={`${bgvalue%2==0 ? "text-white" : "text-black"} w-[50px] h-[50px]`}></SunMoon>
               </div>
            </div>
           

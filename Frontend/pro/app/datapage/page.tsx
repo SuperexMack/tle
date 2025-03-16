@@ -21,15 +21,24 @@ export default function(){
     startTimeSeconds:number;
     
   }
+
+
+  interface LcInterface{
+    title:string;
+    startTime:number
+  }
+    const [bgvalue,setvalue] = useState(0)
     const [userData,setUserData] = useState("")
     const [ccData,setCCdata] = useState<Contest[]>([])
     const [ccDataSec,setCCdataSec] = useState<Contest[]>([])
     const [cfDataFirst,setCFdataFirst] = useState<ContestCodeforces[]>([])
     const [cfDataSecond,setCFdataSecond] = useState<ContestCodeforces[]>([])
+    const [lcContest,setLcContest] = useState<LcInterface[]>([])
     const [numvalue,setValue] = useState(0);
 
     const [playlistData,setPlaylistData] = useState([])
     const [ccplaylistData,setCCplaylistData] = useState([])
+    const [LcplaylistData,setLcplaylistData] = useState([])
 
     useEffect(()=>{
       const findData = async()=>{
@@ -62,6 +71,22 @@ export default function(){
 },[])
 
 
+useEffect(()=>{
+  const findData = async()=>{
+      try{
+          let ytdata = await axios.get(`https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=PLcXpkI9A-RZI6FhydNz3JBt_-p_i25Cbr&si=2AtlC9r-YCyB9rAd&key=AIzaSyDM-ijJJgH9nirFb2hNGUYOpUm5XCgS4oo`)
+          setLcplaylistData(ytdata.data.items)
+          console.log("yoyo" , playlistData)
+      }
+      catch(error){
+          console.log("Something went wrong while fetching data " + error)
+      }
+  }
+  findData()
+  
+},[])
+
+
     const getTimeLeft = (value:string)=>{
       let valConvertion = parseInt(value)
       let currentTime = Date.now()
@@ -87,6 +112,24 @@ export default function(){
 
       return `${Days} Days , ${Hours} Hours , ${minutes} minutes`
     }
+
+    
+
+    // LC Contest
+
+    // useEffect(()=>{
+    //   const lcCaller = async()=>{
+    //     try{
+    //       let response = await axios.get("http://localhost:5000/lcData")
+    //       setLcContest(response.data.lcdata)
+    //       setValue(6)
+    //     }
+    //     catch(error){
+    //       console.log("lc Error " + error)
+    //     }
+    //   }
+    //   lcCaller()
+    // },[])
 
     
     
@@ -130,6 +173,23 @@ export default function(){
         CodeForcesData()
       }
 
+
+      if(userData === "leetcode"){
+        const lcCaller = async()=>{
+          try{
+            let response = await axios.get("http://localhost:5000/lcData")
+            setLcContest(response.data.lcdata)
+            setValue(6)
+          }
+          catch(error){
+            console.log("lc Error " + error)
+          }
+        }
+        lcCaller()
+      }
+
+
+
       
     }, [userData]); 
 
@@ -137,11 +197,11 @@ export default function(){
     return(
         <>
 
-        <Navbar></Navbar>
-        <div className="bg-[#0f0e1a] w-full min-h-screen flex flex-col">
+        <Navbar bgvalue={bgvalue} setvalue={setvalue}></Navbar>
+        <div className={`${bgvalue%2==0 ? "bg-[#0f0e1a]" : "bg-white"} w-full min-h-screen flex flex-col`}>
            <div className="w-full h-[100px] mt-[100px] flex space-x-6 items-center justify-center">
            <HyperTextDemo></HyperTextDemo>
-              <select onChange={(e)=>setUserData(e.target.value)} className="bg-white border-lg rounded-lg p-1">
+              <select onChange={(e)=>setUserData(e.target.value)} className={`${bgvalue%2==0 ? "bg-[white]" : "bg-slate-200 border-2 border-black"} border-lg rounded-lg p-1`}>
                 <option value="selected">Select option</option>
                 <option value="leetcode">LeetCode</option>
                 <option value="codeforeces">CodeForces</option>
@@ -156,7 +216,7 @@ export default function(){
             
             {numvalue == 0&&(
               <div className="flex justify-center items-center min-h-screen w-full">
-                 <h1 className="text-white font-bold text-[40px]">Select a Platform......</h1>
+                 <h1 className={`${bgvalue%2==0 ? "text-white" : "text-black"} font-bold text-[40px]`}>Select a Platform......</h1>
               </div>
             )}
 
@@ -240,6 +300,33 @@ export default function(){
             ):(
               <div>
               {/* <p>No data found</p> */}
+              </div>
+            )}
+
+
+           {numvalue == 6 &&  lcContest.length>0?(
+              <>
+
+            {lcContest.map((cont,index)=>{
+              let video = LcplaylistData[index]?.snippet?.resourceId?.videoId; 
+              return(
+              <div key={index} className="bg-slate-800 hover:shadow-lg hover:shadow-blue-500/50 transition-all duration-300 w-[30%] m-3 rounded-xl  hover:cursor-pointer p-2 flex flex-col justify-center items-center space-y-4">
+                   <p className="text-center text-[20px] text-white font-bold">{cont.title}</p>
+                    <p className="text-center text-[20px] text-white font-bold">Contest Duration : <span className="text-red-500">Finished</span></p>
+                    <p className="text-center text-[20px] text-white font-bold">StartTime: <span className="text-red-500">{new Date(1000*cont.startTime).toLocaleString()}</span></p>
+                    <div className="flex justify-center items-center space-x-6 w-full">
+                    <div className="flex justify-center items-center space-x-6 w-full">
+                    <Link href={`https://codeforces.com/contest/${cont.id}`}><button className="bg-green-600 hover:cursor-pointer hover:bg-red-600 p-3 text-white font-bold rounded-xl">Go to Contest</button></Link>
+                    <Link href={`https://www.youtube.com/watch?v=${video}`}><button className="bg-green-600 hover:cursor-pointer hover:bg-red-600 p-3 text-white font-bold rounded-xl">Check out Video</button></Link>
+                    </div>                    </div>
+                </div>
+              )
+            })} 
+
+             </>
+            ):(
+              <div>
+              
               </div>
             )}
 
