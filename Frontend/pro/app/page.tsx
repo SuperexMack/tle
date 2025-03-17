@@ -1,14 +1,18 @@
+"use client"
+
 import Image from "next/image";
 import { Navbar } from "./Components/Navbar";
 import myimg from "./Components/mytle.jpg"
 import { HeroVideoDialogDemo } from "./Components/Video";
 import { DotPatternDemo } from "./Components/radical";
+import { useState } from "react";
 
 export default function Home() {
+  const [bgvalue,setvalue] = useState(0)
   return(
     <>
-    <Navbar></Navbar>
-    <div className="w-full min-h-screen flex flex-col bg-[#0f0e1a]">
+    <Navbar  bgvalue={bgvalue} setvalue={setvalue}></Navbar>
+    <div className={`${bgvalue%2==0 ? "bg-[#0f0e1a]" : "bg-white"} w-full min-h-screen flex flex-col`}>
 
       <div className="w-full h-auto p-3 mt-[120px] flex flex-col">
           {/* first Box */}

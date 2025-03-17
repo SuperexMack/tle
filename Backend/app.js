@@ -48,6 +48,63 @@ app.get("/api/codeforces",async(req,res)=>{
   }
 })
 
+
+const url = 'https://leetcode.com/graphql/';
+const constestData = {
+  operationName: "pastContests",
+  query :`
+    query pastContests($pageNo: Int, $numPerPage: Int) {
+            pastContests(pageNo: $pageNo, numPerPage: $numPerPage) {
+                pageNum
+                currentPage
+                totalNum
+                numPerPage
+                data {
+                    title
+                    titleSlug
+                    startTime
+                    originStartTime
+                    cardImg
+                    sponsors {
+                        name
+                        lightLogo
+                        darkLogo
+                    }
+                }
+            }
+        }
+    `,
+    variables: {
+      pageNo: 1
+  }
+}
+
+
+let storageData = [];
+
+
+
+const getLeetcodeData = async()=>{
+  try{
+    const getData = await axios.post(url,constestData)
+    getData.data.data.pastContests.data.map((value)=>{
+       storageData.push(value)
+    })
+  }
+  catch(error){
+    console.log("Something went wrong " + error)
+  }
+}
+
+app.get("/lcData",(req,res)=>{
+  getLeetcodeData()
+  return res.json({lcdata : storageData})
+})
+
+
+
+
+
 app.listen(PORT,()=>{
     console.log(`Server is running on the port number ${PORT}`)
 })

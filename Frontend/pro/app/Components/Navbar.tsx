@@ -1,5 +1,6 @@
 "use client"
-import { SunMoon } from 'lucide-react';
+import {SunMoon } from 'lucide-react';
+import Link from 'next/link';
 import { useState } from 'react';
 
 
@@ -20,7 +21,11 @@ export function Navbar({bgvalue,setvalue}){
            
            <div className="absolute right-[10%] flex items-center justify-center  space-x-7">
               <div className="flex items-center justify-center bg-purple-600 hover:bg-purple-500 rounded-xl w-[200px]">
-              <h1 className="p-2 font-bold text-white text-[20px] hover:cursor-pointer">Explore</h1>
+              <Link href={"/datapage"}><h1 className="p-2 font-bold text-white text-[20px] hover:cursor-pointer">Explore</h1></Link>
+              </div>
+
+              <div className="flex items-center justify-center bg-purple-600 hover:bg-purple-500 rounded-xl w-[200px]">
+              <Link href={"/bookmark"}><h1 className="p-2 font-bold text-white text-[20px] hover:cursor-pointer">BookMarks</h1></Link>
               </div>
 
               <div className="flex items-center justify-center ">

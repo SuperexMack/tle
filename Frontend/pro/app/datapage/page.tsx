@@ -5,6 +5,7 @@ import { Navbar } from "../Components/Navbar";
 import { HyperTextDemo } from "../Components/option";
 import axios from "axios";
 import Link from "next/link";
+import { Bookmark } from 'lucide-react';
 
 export default function(){
 
@@ -106,6 +107,20 @@ useEffect(() => {
 
 // Magic with CF 
 
+const [newCCplaylistData,setnewCCplaylistData] = useState<lcdatatype[]>([])
+
+useEffect(()=>{
+  setnewCCplaylistData(prev=>[
+    ...prev,
+    ...ccplaylistData.map(value=>({
+      title: value.snippet.title,
+      videoId: value.snippet.resourceId.videoId
+    }))
+  ])
+},[ccplaylistData])
+
+
+
 const [newCFplaylistData,setnewCFplaylistData] = useState<lcdatatype[]>([])
 
 useEffect(()=>{
@@ -161,6 +176,7 @@ useEffect(()=>{
     //   }
     //   lcCaller()
     // },[])
+
 
     
     
@@ -225,7 +241,15 @@ useEffect(()=>{
     }, [userData]); 
 
 
-    // now i am gonna play with the lklklkjjj
+    // Now here we are gonna write Bookmark code
+
+    
+    const onClickBookMark = (value: object) => {
+      let alreadyStoredValue = localStorage.getItem("getbookmarkedData");
+      let jsondata = alreadyStoredValue ? JSON.parse(alreadyStoredValue) : [];
+      localStorage.setItem("getbookmarkedData", JSON.stringify([...jsondata, value]));
+      alert("BookMark Added")
+    };
 
 
     return(
@@ -265,12 +289,20 @@ useEffect(()=>{
                     <p className="text-[20px] text-white font-bold">End At : <span className="text-red-500">{new Date(cont.contest_end_date).toLocaleString()}</span></p>
                     <p className="text-[20px] text-white font-bold">Time Left : <span className="text-red-500">{findCCDate(cont.contest_start_date)}</span></p>
                     <Link href={`https://www.codechef.com/${cont.contest_code}`}><button className="bg-green-600 hover:bg-red-600 p-3 text-white font-bold rounded-xl">Go to Contest</button></Link>
+                    <Bookmark onClick={()=>onClickBookMark(cont)} className="text-blue-600 hover:text-red-500"></Bookmark>
                 </div>
               
               ))}
 
             {ccDataSec.map((cont,index)=>{
-              let video = ccplaylistData[index]?.snippet?.resourceId?.videoId;
+              let checkContestName = cont.contest_code.match(/\d+/)?.[0];
+              let setnewVideo = "";
+
+            for(let check of newCCplaylistData){
+              if(checkContestName && check.title.includes(checkContestName)){
+                setnewVideo = check.videoId
+              }
+            }
                return( 
               <div key={index} className="bg-slate-800 hover:shadow-lg hover:shadow-blue-500/50 transition-all duration-300 w-[30%] m-3 rounded-xl  hover:cursor-pointer p-2 flex flex-col justify-center items-center space-y-4">
                     <p className="text-[20px] text-white font-bold">TimeLine <span className="text-red-500">Past-Contest</span></p>
@@ -280,7 +312,16 @@ useEffect(()=>{
                     <p className="text-[20px] text-white font-bold">Time Left : <span className="text-red-500">{findCCDate(cont.contest_start_date)}</span></p>
                     <div className="flex justify-center items-center space-x-6 w-full">
                     <Link href={`https://codeforces.com/contest/${cont.id}`}><button className="bg-green-600 hover:cursor-pointer hover:bg-red-600 p-3 text-white font-bold rounded-xl">Go to Contest</button></Link>
-                    <Link href={`https://www.youtube.com/watch?v=${video}`}><button className="bg-green-600 hover:cursor-pointer hover:bg-red-600 p-3 text-white font-bold rounded-xl">Check out Video</button></Link>
+                   
+                    {setnewVideo.length>1?(
+                      <>
+                    <Link href={`https://www.youtube.com/watch?v=${setnewVideo}`}><button className="bg-green-600 hover:cursor-pointer hover:bg-red-600 p-3 text-white font-bold rounded-xl">Check out Video</button></Link>
+                    <Bookmark onClick={()=>onClickBookMark(cont)} className="text-blue-600 hover:text-red-500"></Bookmark>
+                    </>
+                    ):(
+                      <>
+                      </>
+                    )}
                     </div>               
                      </div>
                )
@@ -307,6 +348,7 @@ useEffect(()=>{
                     <p className="text-center text-white font-bold">Time Left - <span className="text-red-500">{getTimeLeft(cont.startTimeSeconds.toString())}</span></p>
                     <div className="flex justify-center items-center space-x-6 w-full">
                     <Link href={`https://codeforces.com/contest/${cont.id}`}><button className="bg-green-600 hover:cursor-pointer hover:bg-red-600 p-3 text-white font-bold rounded-xl">Go to Contest</button></Link>
+                    <Bookmark onClick={()=>onClickBookMark(cont)} className="text-blue-600 hover:text-red-500"></Bookmark>
                     </div>
                 </div>
             ))} 
@@ -323,15 +365,19 @@ useEffect(()=>{
 
                 return(
                   <>
-                  <div key={index} className="bg-slate-800 hover:shadow-lg hover:shadow-blue-500/50 transition-all duration-300 w-[30%] m-3 rounded-xl  hover:cursor-pointer p-2 flex flex-col justify-center items-center space-y-4">
+                  <div className="bg-slate-800 hover:shadow-lg hover:shadow-blue-500/50 transition-all duration-300 w-[30%] m-3 rounded-xl  hover:cursor-pointer p-2 flex flex-col justify-center items-center space-y-4">
                    <p className="text-center text-[20px] text-white font-bold">{cont.name}</p>
                     <p className="text-center text-[20px] text-white font-bold">Contest Duration : <span className="text-red-500">{cont.phase === "BEFORE"?"Upcoming":"Past Contest"}</span></p>
                     <p className="text-center text-[20px] text-white font-bold">StartTime: <span className="text-red-500">{new Date(1000*cont.startTimeSeconds).toLocaleString()}</span></p>
                     <p className="text-center text-white font-bold">Time Left - <span className="text-red-500">{getTimeLeft(cont.startTimeSeconds.toString())}</span></p>
                     <div className="flex justify-center items-center space-x-6 w-full">
                     <Link href={`https://codeforces.com/contest/${cont.id}`}><button className="bg-green-600 hover:cursor-pointer hover:bg-red-600 p-3 text-white font-bold rounded-xl">Go to Contest</button></Link>
+                   
                     {setnewVideo.length>1?(
+                      <>
                     <Link href={`https://www.youtube.com/watch?v=${setnewVideo}`}><button className="bg-green-600 hover:cursor-pointer hover:bg-red-600 p-3 text-white font-bold rounded-xl">Check out Video</button></Link>
+                    <Bookmark onClick={()=>onClickBookMark(cont)} className="text-blue-600 hover:text-red-500"></Bookmark>
+                    </>
                     ):(
                       <>
                       </>
@@ -375,10 +421,13 @@ useEffect(()=>{
                     <div className="flex justify-center items-center space-x-6 w-full">
                     <Link href={`https://codeforces.com/contest/${cont.id}`}><button className="bg-green-600 hover:cursor-pointer hover:bg-red-600 p-3 text-white font-bold rounded-xl">Go to Contest</button></Link>
                     {setnewVideo.length>1?(
+                      <>
                     <Link href={`https://www.youtube.com/watch?v=${setnewVideo}`}><button className="bg-green-600 hover:cursor-pointer hover:bg-red-600 p-3 text-white font-bold rounded-xl">Check out Video</button></Link>
+                    <Bookmark onClick={()=>onClickBookMark(cont)} className="text-blue-600 hover:text-red-500"></Bookmark>
+                    </>
                     ):(
-<>
-</>
+                    <>
+                    </>
                     )}
                     </div>                    
                     </div>
