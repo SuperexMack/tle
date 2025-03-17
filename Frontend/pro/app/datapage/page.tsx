@@ -9,6 +9,14 @@ import { Bookmark } from 'lucide-react';
 
 export default function(){
 
+  const [storageAPI , setAPI] = useState("")
+  useEffect(() => {
+    const api = process.env.NEXT_PUBLIC_YTAPI;
+    setAPI(api)
+    console.log("The API key is " + api);
+  }, []);
+  
+
   interface Contest {
     contest_code: string;
     contest_start_date: string;
@@ -26,7 +34,8 @@ export default function(){
 
   interface LcInterface{
     title:string;
-    startTime:number
+    startTime:number;
+    titleSlug:string
   }
     const [bgvalue,setvalue] = useState(0)
     const [userData,setUserData] = useState("")
@@ -44,7 +53,7 @@ export default function(){
     useEffect(()=>{
       const findData = async()=>{
           try{
-              let ytdata = await axios.get(`https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=PLcXpkI9A-RZLUfBSNp-YQBCOezZKbDSgB&key=AIzaSyDM-ijJJgH9nirFb2hNGUYOpUm5XCgS4oo`)
+              let ytdata = await axios.get(`https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=PLcXpkI9A-RZLUfBSNp-YQBCOezZKbDSgB&key=${storageAPI}`)
               setPlaylistData(ytdata.data.items)
               console.log("yoyo" , playlistData)
           }
@@ -59,7 +68,7 @@ export default function(){
   useEffect(()=>{
     const findData = async()=>{
         try{
-            let ytdata = await axios.get(`https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=PLcXpkI9A-RZIZ6lsE0KCcLWeKNoG45fYr&key=AIzaSyDM-ijJJgH9nirFb2hNGUYOpUm5XCgS4oo`)
+            let ytdata = await axios.get(`https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=PLcXpkI9A-RZIZ6lsE0KCcLWeKNoG45fYr&key=${storageAPI}`)
             setCCplaylistData(ytdata.data.items)
             console.log("yoyo" , playlistData)
         }
@@ -75,7 +84,7 @@ export default function(){
 useEffect(()=>{
   const findData = async()=>{
       try{
-          let ytdata = await axios.get(`https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=PLcXpkI9A-RZI6FhydNz3JBt_-p_i25Cbr&si=2AtlC9r-YCyB9rAd&key=AIzaSyDM-ijJJgH9nirFb2hNGUYOpUm5XCgS4oo`)
+          let ytdata = await axios.get(`https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=PLcXpkI9A-RZI6FhydNz3JBt_-p_i25Cbr&si=2AtlC9r-YCyB9rAd&key=${storageAPI}`)
           setLcplaylistData(ytdata.data.items)
           console.log("yoyo" , playlistData)
       }
@@ -614,7 +623,7 @@ useEffect(()=>{
                   
                   {/* Actions */}
                   <div className="flex flex-wrap gap-3 mt-2">
-                    <Link href={`https://leetcode.com/contest/${cont.title}`}>
+                    <Link href={`https://leetcode.com/contest/${cont.titleSlug}`}>
                       <button className="bg-green-600 hover:bg-green-700 px-4 py-2 text-white font-medium rounded-lg transition-colors flex items-center gap-2">
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
