@@ -20,13 +20,20 @@ export default function(){
             setFa("PLcXpkI9A-RZIZ6lsE0KCcLWeKNoG45fYr");
         }
     }, [userdata]);
+
+    const [storageAPI , setAPI] = useState("")
+  useEffect(() => {
+    const api = process.env.NEXT_PUBLIC_YTAPI;
+    setAPI(api)
+    console.log("The API key is " + api);
+  }, []);
     
 
 
     useEffect(()=>{
         const findData = async()=>{
             try{
-                let ytdata = await axios.get(`https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=${fa}&key=AIzaSyDM-ijJJgH9nirFb2hNGUYOpUm5XCgS4oo`)
+                let ytdata = await axios.get(`https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=${fa}&key=${storageAPI}`)
                 console.log(ytdata)
                 setPlaylistData(ytdata.data.items)
                 console.log("yoyo" , playlistData)
