@@ -282,16 +282,63 @@ useEffect(()=>{
             {numvalue == 2 && (ccData.length>0 || ccDataSec.length>0)?(
               <>
               {ccData.map((cont,index)=>(
-                <div key={index} className="bg-slate-800 hover:shadow-lg hover:shadow-blue-500/50 transition-all duration-300 w-[30%] m-3 rounded-xl  hover:cursor-pointer p-2 flex flex-col justify-center items-center space-y-4">
-                    <p className="text-[20px] text-white font-bold">TimeLine <span className="text-red-500">Upcoming</span></p>
-                    <p className="text-[20px] text-white font-bold">Contest Name : <span className="text-red-500">{cont.contest_code}</span></p>
-                    <p className="text-[20px] text-white font-bold">Starts At : <span className="text-red-500">{new Date(cont.contest_start_date).toLocaleString()}</span></p>
-                    <p className="text-[20px] text-white font-bold">End At : <span className="text-red-500">{new Date(cont.contest_end_date).toLocaleString()}</span></p>
-                    <p className="text-[20px] text-white font-bold">Time Left : <span className="text-red-500">{findCCDate(cont.contest_start_date)}</span></p>
-                    <Link href={`https://www.codechef.com/${cont.contest_code}`}><button className="bg-green-600 hover:bg-red-600 p-3 text-white font-bold rounded-xl">Go to Contest</button></Link>
-                    <Bookmark onClick={()=>onClickBookMark(cont)} className="text-blue-600 hover:text-red-500"></Bookmark>
-                </div>
-              
+               <div 
+               key={index} 
+               className="bg-gradient-to-br from-slate-800 to-slate-900 hover:shadow-lg hover:shadow-blue-500/50 transition-all duration-300 w-full max-w-sm m-3 rounded-xl overflow-hidden border border-slate-700 hover:border-blue-500"
+             >
+               <div className="p-6 flex flex-col gap-4">
+                 {/* Header with Timeline */}
+                 <div className="flex justify-center items-center gap-2 mb-1">
+                   <h3 className="text-lg font-bold text-white">TimeLine</h3>
+                   <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-900 text-green-200">
+                     Upcoming
+                   </span>
+                 </div>
+                 
+                 {/* Contest Name */}
+                 <div className="text-center">
+                   <p className="text-sm text-slate-300 mb-1">Contest Name:</p>
+                   <p className="text-red-400 font-bold text-lg">{cont.contest_code}</p>
+                 </div>
+                 
+                 {/* Time Details */}
+                 <div className="bg-slate-700 rounded-lg p-3 space-y-2">
+                   <div>
+                     <p className="text-sm text-slate-300">Starts At:</p>
+                     <p className="text-white font-medium">{new Date(cont.contest_start_date).toLocaleString()}</p>
+                   </div>
+                   
+                   <div>
+                     <p className="text-sm text-slate-300">Ends At:</p>
+                     <p className="text-white font-medium">{new Date(cont.contest_end_date).toLocaleString()}</p>
+                   </div>
+                   
+                   <div>
+                     <p className="text-sm text-slate-300">Time Left:</p>
+                     <p className="text-red-400 font-bold">{findCCDate(cont.contest_start_date)}</p>
+                   </div>
+                 </div>
+                 
+                 {/* Actions */}
+                 <div className="flex justify-center items-center gap-4 mt-2">
+                   <Link href={`https://www.codechef.com/${cont.contest_code}`}>
+                     <button className="bg-green-600 hover:bg-green-700 px-4 py-2 text-white font-medium rounded-lg transition-colors flex items-center gap-2">
+                       <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                       </svg>
+                       Go to Contest
+                     </button>
+                   </Link>
+                   
+                   <button 
+                     onClick={() => onClickBookMark(cont)} 
+                     className="p-2 text-blue-400 hover:text-blue-300 transition-colors bg-slate-700 hover:bg-slate-600 rounded-lg"
+                   >
+                     <Bookmark className="h-5 w-5" />
+                   </button>
+                 </div>
+               </div>
+             </div>
               ))}
 
             {ccDataSec.map((cont,index)=>{
@@ -304,26 +351,77 @@ useEffect(()=>{
               }
             }
                return( 
-              <div key={index} className="bg-slate-800 hover:shadow-lg hover:shadow-blue-500/50 transition-all duration-300 w-[30%] m-3 rounded-xl  hover:cursor-pointer p-2 flex flex-col justify-center items-center space-y-4">
-                    <p className="text-[20px] text-white font-bold">TimeLine <span className="text-red-500">Past-Contest</span></p>
-                    <p className="text-[20px] text-white font-bold">Contest Name : <span className="text-red-500">{cont.contest_code}</span></p>
-                    <p className="text-[20px] text-white font-bold">Starts At : <span className="text-red-500">{new Date(cont.contest_start_date).toLocaleString()}</span></p>
-                    <p className="text-[20px] text-white font-bold">End At : <span className="text-red-500">{new Date(cont.contest_end_date).toLocaleString()}</span></p>
-                    <p className="text-[20px] text-white font-bold">Time Left : <span className="text-red-500">{findCCDate(cont.contest_start_date)}</span></p>
-                    <div className="flex justify-center items-center space-x-6 w-full">
-                    <Link href={`https://codeforces.com/contest/${cont.id}`}><button className="bg-green-600 hover:cursor-pointer hover:bg-red-600 p-3 text-white font-bold rounded-xl">Go to Contest</button></Link>
-                   
-                    {setnewVideo.length>1?(
+                <div 
+                key={index} 
+                className="bg-gradient-to-br from-slate-800 to-slate-900 hover:shadow-lg hover:shadow-blue-500/50 transition-all duration-300 w-full max-w-sm m-3 rounded-xl overflow-hidden border border-slate-700 hover:border-blue-500"
+              >
+                <div className="p-6 flex flex-col gap-4">
+                  {/* Header with Timeline */}
+                  <div className="flex justify-center items-center gap-2 mb-1">
+                    <h3 className="text-lg font-bold text-white">TimeLine</h3>
+                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-900 text-red-200">
+                      Past-Contest
+                    </span>
+                  </div>
+                  
+                  {/* Contest Name */}
+                  <div className="text-center">
+                    <p className="text-sm text-slate-300 mb-1">Contest Name:</p>
+                    <p className="text-red-400 font-bold text-lg">{cont.contest_code}</p>
+                  </div>
+                  
+                  {/* Time Details */}
+                  <div className="bg-slate-700 rounded-lg p-3 space-y-2">
+                    <div>
+                      <p className="text-sm text-slate-300">Starts At:</p>
+                      <p className="text-white font-medium">{new Date(cont.contest_start_date).toLocaleString()}</p>
+                    </div>
+                    
+                    <div>
+                      <p className="text-sm text-slate-300">Ends At:</p>
+                      <p className="text-white font-medium">{new Date(cont.contest_end_date).toLocaleString()}</p>
+                    </div>
+                    
+                    <div>
+                      <p className="text-sm text-slate-300">Time Left:</p>
+                      <p className="text-red-400 font-bold">{findCCDate(cont.contest_start_date)}</p>
+                    </div>
+                  </div>
+                  
+                  {/* Actions */}
+                  <div className="flex flex-wrap justify-center items-center gap-3 mt-2">
+                    <Link href={`https://www.codechef.com/${cont.contest_code}`}>
+                      <button className="bg-green-600 hover:bg-green-700 px-4 py-2 text-white font-medium rounded-lg transition-colors flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                        </svg>
+                        Go to Contest
+                      </button>
+                    </Link>
+                    
+                    {setnewVideo.length > 1 ? (
                       <>
-                    <Link href={`https://www.youtube.com/watch?v=${setnewVideo}`}><button className="bg-green-600 hover:cursor-pointer hover:bg-red-600 p-3 text-white font-bold rounded-xl">Check out Video</button></Link>
-                    <Bookmark onClick={()=>onClickBookMark(cont)} className="text-blue-600 hover:text-red-500"></Bookmark>
-                    </>
-                    ):(
-                      <>
+                        <Link href={`https://www.youtube.com/watch?v=${setnewVideo}`}>
+                          <button className="bg-red-600 hover:bg-red-700 px-4 py-2 text-white font-medium rounded-lg transition-colors flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            Check out Video
+                          </button>
+                        </Link>
+                        
+                        <button 
+                          onClick={() => onClickBookMark(cont)} 
+                          className="p-2 text-blue-400 hover:text-blue-300 transition-colors bg-slate-700 hover:bg-slate-600 rounded-lg"
+                        >
+                          <Bookmark className="h-5 w-5" />
+                        </button>
                       </>
-                    )}
-                    </div>               
-                     </div>
+                    ) : null}
+                  </div>
+                </div>
+              </div>
                )
           })} 
              </>
@@ -341,16 +439,53 @@ useEffect(()=>{
               <>
 
             {cfDataSecond.map((cont,index)=>(
-              <div key={index} className="bg-slate-800 hover:shadow-lg hover:shadow-blue-500/50 transition-all duration-300 w-[30%] m-3 rounded-xl  hover:cursor-pointer p-2 flex flex-col justify-center items-center space-y-4">
-                   <p className="text-center text-[20px] text-white font-bold">{cont.name}</p>
-                    <p className="text-center text-[20px] text-white font-bold">Contest Duration : <span className="text-red-500">{cont.phase === "BEFORE"?"Upcoming":"Past Contest"}</span></p>
-                    <p className="text-center text-[20px] text-white font-bold">StartTime: <span className="text-red-500">{new Date(1000*cont.startTimeSeconds).toLocaleString()}</span></p>
-                    <p className="text-center text-white font-bold">Time Left - <span className="text-red-500">{getTimeLeft(cont.startTimeSeconds.toString())}</span></p>
-                    <div className="flex justify-center items-center space-x-6 w-full">
-                    <Link href={`https://codeforces.com/contest/${cont.id}`}><button className="bg-green-600 hover:cursor-pointer hover:bg-red-600 p-3 text-white font-bold rounded-xl">Go to Contest</button></Link>
-                    <Bookmark onClick={()=>onClickBookMark(cont)} className="text-blue-600 hover:text-red-500"></Bookmark>
-                    </div>
-                </div>
+             <div 
+             key={index} 
+             className="bg-gradient-to-br from-slate-800 to-slate-900 hover:shadow-lg hover:shadow-blue-500/50 transition-all duration-300 w-full max-w-sm m-3 rounded-xl overflow-hidden border border-slate-700 hover:border-blue-500"
+           >
+             <div className="p-6 flex flex-col gap-4">
+               {/* Header */}
+               <h3 className="text-xl font-bold text-white text-center truncate">{cont.name}</h3>
+               
+               {/* Status Badge */}
+               <div className="flex justify-center">
+                 <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${cont.phase === "BEFORE" ? "bg-green-900 text-green-200" : "bg-red-900 text-red-200"}`}>
+                   {cont.phase === "BEFORE" ? "Upcoming" : "Past Contest"}
+                 </span>
+               </div>
+               
+               {/* Time Details */}
+               <div className="text-center">
+                 <p className="text-sm text-slate-300 mb-1">Start Time:</p>
+                 <p className="text-white font-medium">{new Date(1000*cont.startTimeSeconds).toLocaleString()}</p>
+               </div>
+               
+               {/* Time Left */}
+               <div className="text-center bg-slate-700 rounded-lg p-3">
+                 <p className="text-sm text-slate-300 mb-1">Time Left:</p>
+                 <p className="text-red-400 font-bold">{getTimeLeft(cont.startTimeSeconds.toString())}</p>
+               </div>
+               
+               {/* Actions */}
+               <div className="flex justify-center items-center gap-4 mt-2">
+                 <Link href={`https://codeforces.com/contest/${cont.id}`}>
+                   <button className="bg-green-600 hover:bg-green-700 px-4 py-2 text-white font-medium rounded-lg transition-colors flex items-center gap-2">
+                     <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                     </svg>
+                     Go to Contest
+                   </button>
+                 </Link>
+                 
+                 <button 
+                   onClick={() => onClickBookMark(cont)} 
+                   className="p-2 text-blue-400 hover:text-blue-300 transition-colors bg-slate-700 hover:bg-slate-600 rounded-lg"
+                 >
+                   <Bookmark className="h-5 w-5" />
+                 </button>
+               </div>
+             </div>
+           </div>
             ))} 
 
               {cfDataFirst.map((cont,index)=>{
@@ -365,26 +500,67 @@ useEffect(()=>{
 
                 return(
                   <>
-                  <div className="bg-slate-800 hover:shadow-lg hover:shadow-blue-500/50 transition-all duration-300 w-[30%] m-3 rounded-xl  hover:cursor-pointer p-2 flex flex-col justify-center items-center space-y-4">
-                   <p className="text-center text-[20px] text-white font-bold">{cont.name}</p>
-                    <p className="text-center text-[20px] text-white font-bold">Contest Duration : <span className="text-red-500">{cont.phase === "BEFORE"?"Upcoming":"Past Contest"}</span></p>
-                    <p className="text-center text-[20px] text-white font-bold">StartTime: <span className="text-red-500">{new Date(1000*cont.startTimeSeconds).toLocaleString()}</span></p>
-                    <p className="text-center text-white font-bold">Time Left - <span className="text-red-500">{getTimeLeft(cont.startTimeSeconds.toString())}</span></p>
-                    <div className="flex justify-center items-center space-x-6 w-full">
-                    <Link href={`https://codeforces.com/contest/${cont.id}`}><button className="bg-green-600 hover:cursor-pointer hover:bg-red-600 p-3 text-white font-bold rounded-xl">Go to Contest</button></Link>
-                   
-                    {setnewVideo.length>1?(
-                      <>
-                    <Link href={`https://www.youtube.com/watch?v=${setnewVideo}`}><button className="bg-green-600 hover:cursor-pointer hover:bg-red-600 p-3 text-white font-bold rounded-xl">Check out Video</button></Link>
-                    <Bookmark onClick={()=>onClickBookMark(cont)} className="text-blue-600 hover:text-red-500"></Bookmark>
-                    </>
-                    ):(
-                      <>
-                      </>
-                    )}
-                    </div>
-                </div>
-              
+                  <div 
+  key={index} 
+  className="bg-gradient-to-br from-slate-800 to-slate-900 hover:shadow-lg hover:shadow-blue-500/50 transition-all duration-300 w-full max-w-sm m-3 rounded-xl overflow-hidden border border-slate-700 hover:border-blue-500"
+>
+  <div className="p-6 flex flex-col gap-4">
+    {/* Header */}
+    <h3 className="text-xl font-bold text-white text-center truncate">{cont.name}</h3>
+    
+    
+    <div className="flex justify-center">
+      <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${cont.phase === "BEFORE" ? "bg-green-900 text-green-200" : "bg-red-900 text-red-200"}`}>
+        {cont.phase === "BEFORE" ? "Upcoming" : "Past Contest"}
+      </span>
+    </div>
+    
+   
+    <div className="text-center">
+      <p className="text-sm text-slate-300 mb-1">Start Time:</p>
+      <p className="text-white font-medium">{new Date(1000*cont.startTimeSeconds).toLocaleString()}</p>
+    </div>
+    
+    {/* Time Left */}
+    <div className="text-center bg-slate-700 rounded-lg p-3">
+      <p className="text-sm text-slate-300 mb-1">Time Left:</p>
+      <p className="text-red-400 font-bold">{getTimeLeft(cont.startTimeSeconds.toString())}</p>
+    </div>
+    
+    
+    <div className="flex flex-wrap justify-center items-center gap-3 mt-2">
+      <Link href={`https://codeforces.com/contest/${cont.id}`}>
+        <button className="bg-green-600 hover:bg-green-700 px-4 py-2 text-white font-medium rounded-lg transition-colors flex items-center gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+          </svg>
+          Go to Contest
+        </button>
+      </Link>
+      
+      {setnewVideo.length > 1 ? (
+        <>
+          <Link href={`https://www.youtube.com/watch?v=${setnewVideo}`}>
+            <button className="bg-red-600 hover:bg-red-700 px-4 py-2 text-white font-medium rounded-lg transition-colors flex items-center gap-2">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              Check out Video
+            </button>
+          </Link>
+          
+          <button 
+            onClick={() => onClickBookMark(cont)} 
+            className="p-2 text-blue-400 hover:text-blue-300 transition-colors bg-slate-700 hover:bg-slate-600 rounded-lg"
+          >
+            <Bookmark className="h-5 w-5" />
+          </button>
+        </>
+      ) : null}
+    </div>
+  </div>
+</div>
                   </>
                 )
                 
@@ -413,25 +589,63 @@ useEffect(()=>{
               }
               
               return(
-              <div key={index} className="bg-slate-800 hover:shadow-lg hover:shadow-blue-500/50 transition-all duration-300 w-[30%] m-3 rounded-xl  hover:cursor-pointer p-2 flex flex-col justify-center items-center space-y-4">
-                   <p className="text-center text-[20px] text-white font-bold">{cont.title}</p>
-                    <p className="text-center text-[20px] text-white font-bold">Contest Duration : <span className="text-red-500">Finished</span></p>
-                    <p className="text-center text-[20px] text-white font-bold">StartTime: <span className="text-red-500">{new Date(1000*cont.startTime).toLocaleString()}</span></p>
-                    <div className="flex justify-center items-center space-x-6 w-full">
-                    <div className="flex justify-center items-center space-x-6 w-full">
-                    <Link href={`https://codeforces.com/contest/${cont.id}`}><button className="bg-green-600 hover:cursor-pointer hover:bg-red-600 p-3 text-white font-bold rounded-xl">Go to Contest</button></Link>
-                    {setnewVideo.length>1?(
+                <div 
+                key={index} 
+                className="bg-gradient-to-br from-slate-800 to-slate-900 hover:shadow-lg hover:shadow-blue-500/50 transition-all duration-300 w-full max-w-sm m-3 rounded-xl overflow-hidden border border-slate-700 hover:border-blue-500"
+              >
+                <div className="p-6 flex flex-col gap-4">
+                  {/* Header */}
+                  <h3 className="text-xl font-bold text-white truncate">{cont.title}</h3>
+                  
+                  {/* Status Badge */}
+                  <div className="flex items-center gap-2">
+                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-900 text-red-200">
+                      Finished
+                    </span>
+                    <span className="text-slate-400 text-sm">
+                      {new Date(1000*cont.startTime).toLocaleDateString()}
+                    </span>
+                  </div>
+                  
+                  {/* Time Details */}
+                  <div className="text-sm text-slate-300">
+                    <p>Started: {new Date(1000*cont.startTime).toLocaleString()}</p>
+                  </div>
+                  
+                  {/* Actions */}
+                  <div className="flex flex-wrap gap-3 mt-2">
+                    <Link href={`https://leetcode.com/contest/${cont.title}`}>
+                      <button className="bg-green-600 hover:bg-green-700 px-4 py-2 text-white font-medium rounded-lg transition-colors flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                        </svg>
+                        Contest
+                      </button>
+                    </Link>
+                    
+                    {setnewVideo.length > 1 ? (
                       <>
-                    <Link href={`https://www.youtube.com/watch?v=${setnewVideo}`}><button className="bg-green-600 hover:cursor-pointer hover:bg-red-600 p-3 text-white font-bold rounded-xl">Check out Video</button></Link>
-                    <Bookmark onClick={()=>onClickBookMark(cont)} className="text-blue-600 hover:text-red-500"></Bookmark>
-                    </>
-                    ):(
-                    <>
-                    </>
-                    )}
-                    </div>                    
-                    </div>
+                        <Link href={`https://www.youtube.com/watch?v=${setnewVideo}`}>
+                          <button className="bg-red-600 hover:bg-red-700 px-4 py-2 text-white font-medium rounded-lg transition-colors flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            Video
+                          </button>
+                        </Link>
+                        
+                        <button 
+                          onClick={() => onClickBookMark(cont)} 
+                          className="p-2 text-blue-400 hover:text-blue-300 transition-colors bg-slate-700 hover:bg-slate-600 rounded-lg"
+                        >
+                          <Bookmark className="h-5 w-5" />
+                        </button>
+                      </>
+                    ) : null}
+                  </div>
                 </div>
+              </div>
               )
             })} 
 
