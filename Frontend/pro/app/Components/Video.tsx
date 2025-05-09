@@ -4,7 +4,7 @@ import myimg from "./priyansh.jpg"
 export function HeroVideoDialogDemo() {
  
   return (
-    <div className="relative shadow-[0px_-40px_80px_-10px_gray]">
+    <div className="relative">
       <HeroVideoDialog
         className="block dark:hidden"
         animationStyle="from-center"
