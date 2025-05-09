@@ -12,9 +12,9 @@ export default function Home() {
   return(
     <>
     <Navbar  bgvalue={bgvalue} setvalue={setvalue}></Navbar>
-    <div className={`${bgvalue%2==0 ? "bg-[#0f0e1a]" : "bg-white"} w-full min-h-screen flex flex-col`}>
+    <div className={`${bgvalue%2==0 ? "bg-[#0f0e1a]" : "bg-white"} w-full min-h-screen flex flex-col space-y-6`}>
 
-      <div className="w-full h-auto p-3 mt-[120px] flex flex-col">
+      <div className="w-full h-auto p-3 mt-[80px] flex flex-col">
           {/* first Box */}
           <div>
           <DotPatternDemo></DotPatternDemo>
