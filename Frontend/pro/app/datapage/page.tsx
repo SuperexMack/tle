@@ -277,8 +277,6 @@ useEffect(()=>{
               </select>
            </div>
 
-           
-            
             
            <div className="w-full md:min-h-screen flex  flex-wrap justify-center space-x-3 space-y-3">
             

@@ -14,7 +14,7 @@ export function Navbar({bgvalue,setvalue}:any){
 
             {/* Name tag */}
            <div className="absolute md:left-[20%] left-[10%]">
-            <h1 className={`${bgvalue%2==0 ? "text-white" : "text-black"} font-bold md:text-[30px] text-[18px]`}>TLE-Ele-App</h1>
+            <Link href={"/"} className={`${bgvalue%2==0 ? "text-white" : "text-black"} font-bold md:text-[30px] text-[18px]`}>TLE-Ele-App</Link>
            </div>
 
            {/* Go Tag */}
