@@ -4,9 +4,9 @@ import Link from 'next/link';
 import { useState } from 'react';
 
 
-export function Navbar({bgvalue,setvalue}){
+export function Navbar({bgvalue,setvalue}:any){
     const click = ()=>{
-       setvalue(()=>bgvalue+1)
+       setvalue(()=>bgvalue)
     }
     return(
         <>

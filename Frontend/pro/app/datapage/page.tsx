@@ -9,7 +9,7 @@ import { Bookmark } from 'lucide-react';
 
 export default function(){
 
-  const [storageAPI , setAPI] = useState("")
+  const [storageAPI , setAPI] = useState<any>("")
   useEffect(() => {
     const api = process.env.NEXT_PUBLIC_YTAPI;
     setAPI(api)
@@ -106,7 +106,7 @@ const [newlcplaylistData,setnewlcplaylistdata] = useState<lcdatatype[]>([])
 useEffect(() => {
   setnewlcplaylistdata(prevState => [
     ...prevState,  // Purana data retain karo
-    ...LcplaylistData.map(value=>({
+    ...LcplaylistData.map((value:any)=>({
       title: value.snippet.title,
       videoId: value.snippet.resourceId.videoId
     }))
@@ -121,7 +121,7 @@ const [newCCplaylistData,setnewCCplaylistData] = useState<lcdatatype[]>([])
 useEffect(()=>{
   setnewCCplaylistData(prev=>[
     ...prev,
-    ...ccplaylistData.map(value=>({
+    ...ccplaylistData.map((value:any)=>({
       title: value.snippet.title,
       videoId: value.snippet.resourceId.videoId
     }))
@@ -135,7 +135,7 @@ const [newCFplaylistData,setnewCFplaylistData] = useState<lcdatatype[]>([])
 useEffect(()=>{
   setnewCFplaylistData(prev=>[
     ...prev,
-    ...playlistData.map(value=>({
+    ...playlistData.map((value:any)=>({
       title: value.snippet.title,
       videoId: value.snippet.resourceId.videoId
     }))
