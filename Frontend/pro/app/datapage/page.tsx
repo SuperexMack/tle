@@ -197,7 +197,7 @@ useEffect(()=>{
         const callerCC = async () => {
           try {
             const response = await axios.get(
-              "http://localhost:5000/api/codechef"
+              "https://tle-nzpe.vercel.app/api/codechef"
             );
             setCCdata(response.data.firstData.contests || []);
             setCCdataSec(response.data.secondData.contests || [])
@@ -216,7 +216,7 @@ useEffect(()=>{
         console.log("Fetching the CodeForces Contest....")
           const CodeForcesData = async()=>{
           try{
-            let response  = await axios.get("http://localhost:5000/api/codeforces")
+            let response  = await axios.get("https://tle-nzpe.vercel.app/api/codeforces")
             setCFdataFirst(response.data.DoneContest)
             setCFdataSecond(response.data.ComingContest)
             setValue(4)
@@ -233,7 +233,7 @@ useEffect(()=>{
       if(userData === "leetcode"){
         const lcCaller = async()=>{
           try{
-            let response = await axios.get("http://localhost:5000/lcData")
+            let response = await axios.get("https://tle-nzpe.vercel.app/lcData")
             setLcContest(response.data.lcdata)
             setValue(6)
           }
