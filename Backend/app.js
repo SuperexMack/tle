@@ -4,7 +4,7 @@ const axios = require("axios");
 
 const app = express();
 app.use(cors({
-  origin:"https://nextcontestmap.vercel.app",
+  origin:"https://contesttracker-weld.vercel.app",
   methods:["GET","POST"],
   allowedHeaders:['Content-Type,Authorization']
 }));
@@ -13,7 +13,7 @@ const PORT = 5000
 
 
 app.get("/" , (req,res)=>{
-  return res.json({msg:'This is the v1 of the contest app'})
+  return res.json({msg:'This is the v2 of the contest app'})
 })
 
 app.get("/api/codechef", async (req, res) => {
