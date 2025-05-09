@@ -266,9 +266,9 @@ useEffect(()=>{
 
         <Navbar bgvalue={bgvalue} setvalue={setvalue}></Navbar>
         <div className={`${bgvalue%2==0 ? "bg-[#0f0e1a]" : "bg-white"} w-full min-h-screen flex flex-col`}>
-           <div className="w-full h-[100px] mt-[100px] flex space-x-6 items-center justify-center">
+           <div className="w-full h-[100px] mt-[100px] flex md:flex-row flex-col space-x-6 items-center justify-center">
            <HyperTextDemo></HyperTextDemo>
-           {/* <h1 className="text-[30px] text-purple-500">Select a platform</h1> */}
+           
               <select onChange={(e)=>setUserData(e.target.value)} className={`${bgvalue%2==0 ? "bg-[white]" : "bg-slate-200 border-2 border-black"} border-lg rounded-lg p-1`}>
                 <option value="selected">Select option</option>
                 <option value="leetcode">LeetCode</option>
@@ -280,11 +280,11 @@ useEffect(()=>{
            
             
             
-           <div className="w-full min-h-screen flex  flex-wrap justify-center space-x-3 space-y-3">
+           <div className="w-full md:min-h-screen flex  flex-wrap justify-center space-x-3 space-y-3">
             
             {numvalue == 0&&(
               <div className="flex justify-center items-center min-h-screen w-full">
-                 <h1 className={`${bgvalue%2==0 ? "text-white" : "text-black"} font-bold text-[40px]`}>Select a Platform......</h1>
+                 <h1 className={`${bgvalue%2==0 ? "text-white" : "text-black"} font-bold md:text-[40px] text-[30px]`}>Select a Platform......</h1>
               </div>
             )}
 
